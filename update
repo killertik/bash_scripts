@@ -1,0 +1,36 @@
+  GNU nano 6.2                                      update                                               
+#!/bin/bash
+
+# script for fully updating debian based linux via the packet manager apt.
+
+red="\033[1;31m"
+green="\033[1;32m"
+nocolor="\033[0m"
+
+echo -e "${green}Hello ${USER^}"
+echo -e "${green}Performing update now on host $HOSTNAME, of type $HOSTTYPE.${nocolor}"
+echo
+echo -e "${red}UPDATING THE PACKAGE DATABASE ...${nocolor}"
+echo 
+sudo apt update
+echo 
+echo -e "${red}UPGRADING INSTALLED PACKAGES ...${nocolor}"
+echo 
+sudo apt upgrade
+echo 
+echo -e "${red}UPGRADING WITH DEPENDENCY RESOLUTION ...${nocolor}"
+echo 
+sudo apt dist-upgrade
+echo 
+echo -e "${red}REMOVING PACKAGES NO LONGER NEEDED ...${nocolor}"
+echo 
+sudo apt autoremove
+echo 
+echo -e "${red}CLEANING UP ...${nocolor}"
+echo
+sudo apt autoclean
+echo
+echo -e "${green}Update completed succesfully!"
+echo -e "${green}You are in directory $PWD"
+echo -e "${green}Goodbye!"
+exit 0
