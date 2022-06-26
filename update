@@ -1,15 +1,18 @@
-  GNU nano 6.2                                      update                                               
-#!/bin/bash
+ #!/bin/bash
 
-# script for fully updating debian based linux via the packet manager apt.
+# script for fully updating the os
 
 red="\033[1;31m"
 green="\033[1;32m"
 nocolor="\033[0m"
-
-echo -e "${green}Hello ${USER^}"
-echo -e "${green}Performing update now on host $HOSTNAME, of type $HOSTTYPE.${nocolor}"
 echo
+echo
+echo -e "${green}Hello ${USER^}"
+echo -e "${green}Performing update now on host $HOSTNAME($HOSTTYPE).${nocolor}"
+echo
+
+start=$(date +%s)
+
 echo -e "${red}UPDATING THE PACKAGE DATABASE ...${nocolor}"
 echo 
 sudo apt update
@@ -30,7 +33,12 @@ echo -e "${red}CLEANING UP ...${nocolor}"
 echo
 sudo apt autoclean
 echo
-echo -e "${green}Update completed succesfully!"
+
+end=$(date +%s)
+
+echo -e "${green}Update completed succesfully in $(($end - $start)) seconds"
 echo -e "${green}You are in directory $PWD"
 echo -e "${green}Goodbye!"
+echo
+echo
 exit 0
