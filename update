@@ -1,10 +1,12 @@
- #!/bin/bash
+#!/bin/bash
 
-# script for fully updating the os
+# Script for fully updating the OS
 
 red="\033[1;31m"
 green="\033[1;32m"
 nocolor="\033[0m"
+logfile="update.log"
+
 echo
 echo
 echo -e "${green}Hello ${USER^}"
@@ -15,28 +17,56 @@ start=$(date +%s)
 
 echo -e "${red}UPDATING THE PACKAGE DATABASE ...${nocolor}"
 echo 
-sudo apt update
+if sudo apt update -y | tee -a $logfile; then
+  echo -e "${green}Package database updated successfully.${nocolor}"
+else
+  echo -e "${red}Failed to update package database.${nocolor}"
+  exit 1
+fi
+
 echo 
 echo -e "${red}UPGRADING INSTALLED PACKAGES ...${nocolor}"
 echo 
-sudo apt upgrade
+if sudo apt upgrade -y | tee -a $logfile; then
+  echo -e "${green}Packages upgraded successfully.${nocolor}"
+else
+  echo -e "${red}Failed to upgrade packages.${nocolor}"
+  exit 1
+fi
+
 echo 
 echo -e "${red}UPGRADING WITH DEPENDENCY RESOLUTION ...${nocolor}"
 echo 
-sudo apt dist-upgrade
+if sudo apt dist-upgrade -y | tee -a $logfile; then
+  echo -e "${green}Packages upgraded with dependency resolution successfully.${nocolor}"
+else
+  echo -e "${red}Failed to upgrade packages with dependency resolution.${nocolor}"
+  exit 1
+fi
+
 echo 
 echo -e "${red}REMOVING PACKAGES NO LONGER NEEDED ...${nocolor}"
 echo 
-sudo apt autoremove
+if sudo apt autoremove -y | tee -a $logfile; then
+  echo -e "${green}Unused packages removed successfully.${nocolor}"
+else
+  echo -e "${red}Failed to remove unused packages.${nocolor}"
+  exit 1
+fi
+
 echo 
 echo -e "${red}CLEANING UP ...${nocolor}"
 echo
-sudo apt autoclean
-echo
+if sudo apt autoclean | tee -a $logfile; then
+  echo -e "${green}Cleanup completed successfully.${nocolor}"
+else
+  echo -e "${red}Failed to clean up.${nocolor}"
+  exit 1
+fi
 
 end=$(date +%s)
 
-echo -e "${green}Update completed succesfully in $(($end - $start)) seconds"
+echo -e "${green}Update completed successfully in $(($end - $start)) seconds"
 echo -e "${green}You are in directory $PWD"
 echo -e "${green}Goodbye!"
 echo
